@@ -21,9 +21,9 @@ const ItemList = ({ items }) => {
             <div className="flex-col w-9/12">
               <span>
                 {item?.card?.info?.itemAttribute?.vegClassifier === "VEG" ? (
-                  <img className="w-4 my-2" src={vegLogo} />
+                  <img className="w-4 my-2" alt="VegLogo" src={vegLogo} />
                 ) : (
-                  <img className="w-4 my-2" src={nonVegLogo} />
+                  <img className="w-4 my-2" alt="NonVegLogo" src={nonVegLogo} />
                 )}
               </span>
               <h2 className="font-bold font-custom text-xl">
@@ -57,6 +57,7 @@ const ItemList = ({ items }) => {
               </div>
               <img
                 className="w-36 rounded-lg"
+                alt=" "
                 src={ITEM_API + item?.card?.info?.imageId}
               />
             </div>
