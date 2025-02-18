@@ -7,7 +7,7 @@ const RestaurantMenu = () => {
   const { resId } = useParams();
 
   const resInfo = useRestaurantMenu(resId);
-  // const [showIndex, setShowIndex] = useState(null);
+
   if (resInfo === null) return <Shimmer />;
 
   const {
@@ -18,19 +18,15 @@ const RestaurantMenu = () => {
     areaname,
     avgRating,
     sla,
-    } = resInfo?.cards[2]?.card?.card?.info;
-   
-    // console.log(resInfo?.cards[2]?.card?.card?.info?.sla);
-  // const { itemCards } =
-  //   resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
+  } = resInfo?.cards[2]?.card?.card?.info || {};
 
   const categories =
-    resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+    resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter(
       (c) =>
         c.card?.card?.["@type"] ===
         "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
-    );
-  // console.log(categories);
+    ) || [];
+
   return (
     <div className="flex-col justify-center items-center m-4">
       <div className="flex-col items-center justify-center mx-auto shadow-lg rounded-3xl bg-slate-200 p-4 w-5/12">
@@ -39,7 +35,7 @@ const RestaurantMenu = () => {
         </h1>
         <div className="flex-col justify-center items-center">
           <h2 className="text-center font-custom underline hover:underline-offset-4 transition-all ease duration-1000 text-lg rounded-2xl bg-slate-300 p-2">
-            {cuisines.join(", ")}
+            {cuisines?.join(", ")}
           </h2>
           <h3 className="text-md my-2">{areaname}</h3>
           <div className="flex justify-center items-center gap-4 bg-slate-300 rounded-2xl">
@@ -49,20 +45,21 @@ const RestaurantMenu = () => {
             <h3 className="text-md my-2">{costForTwoMessage}</h3>
           </div>
           <h3 className="text-center text-md my-2 bg-slate-300 rounded-2xl p-2">
-            Delivery in : {sla.slaString}
+            Delivery in : {sla?.slaString}
           </h3>
         </div>
       </div>
       <div className="flex-col items-center justify-center">
-        {categories.map((category, index) => (
-          // is we remove the comment of line 11, 61, 62 then this is a controlled component
-          <RestaurantCategory
-            key={category?.card?.card?.title}
-            info={category?.card?.card}
-            // showItems={index === showIndex && true}
-            // setShowIndex={() => setShowIndex(index)}
-          />
-        ))}
+        {categories && categories.length > 0 ? (
+          categories.map((category, _index) => (
+            <RestaurantCategory
+              key={category?.card?.card?.title}
+              info={category?.card?.card}
+            />
+          ))
+        ) : (
+          <p>No categories available</p>
+        )}
       </div>
     </div>
   );
